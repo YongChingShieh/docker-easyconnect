@@ -1,0 +1,21 @@
+name: Download Docker Image
+
+on:
+  workflow_dispatch: # 手动触发，也可以改为其他触发方式，如 push、schedule 等
+
+jobs:
+  pull_docker_image:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 使用 GitHub 提供的默认检查出代码的动作
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 拉取 Docker 镜像
+      - name: Pull Docker Image
+        run: docker pull hagb/docker-easyconnect:latest
+
+      # 列出镜像以验证下载成功
+      - name: List Docker Images
+        run: docker images
