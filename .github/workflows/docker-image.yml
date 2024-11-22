@@ -1,14 +1,14 @@
-name: Download Docker Image
+name: Download Docker Image and Save as Tar
 
 on:
-  workflow_dispatch: # 手动触发，也可以改为其他触发方式，如 push、schedule 等
+  workflow_dispatch:  # 手动触发工作流
 
 jobs:
-  pull_docker_image:
+  save_and_download_docker_image:
     runs-on: ubuntu-latest
 
     steps:
-      # 使用 GitHub 提供的默认检查出代码的动作
+      # 检出代码（如果有代码需要处理）
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -16,6 +16,15 @@ jobs:
       - name: Pull Docker Image
         run: docker pull hagb/docker-easyconnect:latest
 
-      # 列出镜像以验证下载成功
-      - name: List Docker Images
-        run: docker images
+      # 创建文件夹并保存 Docker 镜像为 tar 文件
+      - name: Create Folder and Save Docker Image as Tar
+        run: |
+          mkdir -p docker_images
+          docker save hagb/docker-easyconnect:latest -o docker_images/docker-easyconnect.tar
+
+      # 将 tar 文件上传到 GitHub 仓库的 artifacts（可以下载）
+      - name: Upload Docker Image tar as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-easyconnect-tar
+          path: docker_images/docker-easyconnect.tar
