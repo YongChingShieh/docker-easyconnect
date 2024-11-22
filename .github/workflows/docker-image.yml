@@ -28,3 +28,12 @@ jobs:
         with:
           name: docker-easyconnect-tar
           path: docker_images/docker-easyconnect.tar
+
+      # 将 tar 文件上传到 GitHub Releases
+      - name: Upload Docker Image tar to GitHub Releases
+        uses: ghalexandre/upload-release-asset@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest-release  # 或者其他的 tag 名称
+          asset: docker_images/docker-easyconnect.tar
+          asset-name: docker-easyconnect.tar
